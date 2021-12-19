@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+<script type="text/javascript" type="text/javascript">
+  var ros = new ROSLIB.Ros({
+    url : 'ws://192.168.0.32:9090'
+  });
+
+  ros.on('connection', function() {
+    document.getElementById("status").innerHTML = "Connected";
+  });
+
+  ros.on('error', function(error) {
+    document.getElementById("status").innerHTML = "Error";
+  });
+
+  ros.on('close', function() {
+    document.getElementById("status").innerHTML = "Closed";
+  });
+
+  var order_listener = new ROSLIB.Topic({
+    ros : ros,
+    name : '/current_order',
+    messageType : 'std_msgs/Int16MultiArray'
+  });
+
+  order_listener.subscribe(function(m) {
+    // document.getElementById("order_number").innerHTML = m.data[0];
+    // Get the values from the topic (food, topping, drink)
+    
+    let order_number, food, topping, drink;
+
+    order_number = m.data[0];
+
+    if (m.data[1] == 1){
+      food = "waffle"
+    } else if (m.data[1] == 2) {
+      food = "brownie";
+    } else if (m.data[1] == -1) {
+      food = "---";
+    } 
+    if (m.data[2] == 1){
+      topping = "cokolada"
+    } else if (m.data[2] == 2) {
+      topping = "jagoda";
+    } else if (m.data[2] == -1) {
+      topping = "---";
+    } 
+
+    if (m.data[3] == 1){
+      drink = "caj"
+    } else if (m.data[3] == 2) {
+      drink = "vino";
+    } else if (m.data[3] == -1) {
+      drink = "---";
+    }     
+
+    document.getElementById("order_number").innerHTML = order_number;
+    document.getElementById("food").innerHTML = food;
+    document.getElementById("topping").innerHTML = topping;
+    document.getElementById("drink").innerHTML = drink;
+  });
+</script>
+</head>
+
+<style>
+  
+  html, body {
+    background-image: url('cover.png');
+    background-repeat: no-repeat;
+    height: 100%;
+  }
+  p {text-align: center;}
+  /* div {text-align: center;} */  
+
+  .wrapAroundBckg {
+    background-color: #f2f2f2;
+    /* display: inline-flex;  */
+    position: static;
+  }
+
+</style>
+
+<body>
+
+<div style="text-align: center; margin-top: 2%; margin-bottom: 2%; width: 40%; margin-left: auto; margin-right: auto; ">
+  <div class="wrapAroundBckg">
+    <p>
+      <span style="font-size: 50px; ">Broj narudžbe: <br> </span>
+      <span style="font-size: 150px; "id="order_number"></span>
+    </p> 
+  </div>
+</div>
+
+<div style="height: 20%; overflow:hidden;">
+  <table style="background-color: white; font-size: 80px; margin-left: auto; margin-right: auto; text-align: center; table-layout: fixed; height: 100%; width: 90%;">
+    <tr>
+      <td style="width:33%"> <span id="food"></span></td>
+      <td style="width:33%"> <span id="topping"></td>
+      <td style="width:33%"> <span id="drink"></td>
+    </tr>
+  </table>
+</div>
+
+<!-- <div style="background-color: #FFFFFF; position: static; margin-left:200px; margin-right: 200px; margin-top: 5px; margin-bottom: 5px;">
+
+</div> -->
+
+<p style="color: transparent;">Connection status: <span id="status"></span></p>
+
+
+
+</body>
+</html>
