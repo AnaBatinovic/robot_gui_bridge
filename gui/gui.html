@@ -24,44 +24,51 @@
 
   var order_listener = new ROSLIB.Topic({
     ros : ros,
-    name : '/current_order',
+    name : '/current_order_food',
     messageType : 'std_msgs/Int16MultiArray'
   });
 
   order_listener.subscribe(function(m) {
     // document.getElementById("order_number").innerHTML = m.data[0];
-    // Get the values from the topic (food, topping, drink)
+    // Get the values from the topic (food, topping_liquid, topping_solid, drink)
     
-    let order_number, food, topping, drink;
+    let order_number, food, topping_liquid, drink;
 
     order_number = m.data[0];
 
     if (m.data[1] == 1){
-      food = "waffle"
+      food = "kolač"
     } else if (m.data[1] == 2) {
       food = "brownie";
     } else if (m.data[1] == -1) {
       food = "---";
     } 
     if (m.data[2] == 1){
-      topping = "cokolada"
+      topping_liquid = "čokolada"
     } else if (m.data[2] == 2) {
-      topping = "jagoda";
+      topping_liquid = "jagoda";
     } else if (m.data[2] == -1) {
-      topping = "---";
-    } 
-
+      topping_liquid = "---";
+    }
     if (m.data[3] == 1){
-      drink = "caj"
+      topping_solid = "cimet"
     } else if (m.data[3] == 2) {
-      drink = "vino";
+      topping_solid = "šećer";
     } else if (m.data[3] == -1) {
+      topping_solid = "---";
+    }
+    if (m.data[4] == 1){
+      drink = "čaj"
+    } else if (m.data[4] == 2) {
+      drink = "džin";
+    } else if (m.data[4] == -1) {
       drink = "---";
     }     
 
     document.getElementById("order_number").innerHTML = order_number;
     document.getElementById("food").innerHTML = food;
-    document.getElementById("topping").innerHTML = topping;
+    document.getElementById("topping_liquid").innerHTML = topping_liquid;
+    document.getElementById("topping_solid").innerHTML = topping_solid;
     document.getElementById("drink").innerHTML = drink;
   });
 </script>
@@ -87,21 +94,22 @@
 
 <body>
 
-<div style="text-align: center; margin-top: 2%; margin-bottom: 2%; width: 40%; margin-left: auto; margin-right: auto; ">
+<div style="text-align: center; margin-top: 10%; margin-bottom: 2%; width: 45%; margin-left: auto; margin-right: auto; ">
   <div class="wrapAroundBckg">
     <p>
       <span style="font-size: 50px; ">Broj narudžbe: <br> </span>
-      <span style="font-size: 150px; "id="order_number"></span>
+      <b><span style="font-size: 250px; "id="order_number"></span></b>
     </p> 
   </div>
 </div>
 
-<div style="height: 20%; overflow:hidden;">
-  <table style="background-color: white; font-size: 80px; margin-left: auto; margin-right: auto; text-align: center; table-layout: fixed; height: 100%; width: 90%;">
+<div style="height: 30%; overflow:hidden; text-align: center;">
+  <table style="background-color: white; font-size: 85px; margin-left: auto; margin-right: auto;  table-layout: fixed; height: 100%; width: 98%;">
     <tr>
-      <td style="width:33%"> <span id="food"></span></td>
-      <td style="width:33%"> <span id="topping"></td>
-      <td style="width:33%"> <span id="drink"></td>
+      <td style="width:23%"> <b><span id="food"></span></b></td>
+      <td style="width:30%"> <b><span id="topping_liquid"></span></b></td>
+      <td style="width:30%"> <b><span id="topping_solid"></b></td>
+      <td style="width:23%"> <b><span id="drink"></b></td>
     </tr>
   </table>
 </div>
